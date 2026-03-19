@@ -15,17 +15,40 @@ def add_new_client(new:dict, data:list[dict])->list:
 def get_highest_heritage(l:list[dict])->dict:
     return sorted(l, key=lambda x: x['patrimonio'])[-1]
 
-def add_id(data:list[dict]):
+def add_id(data:list[dict])->list:
     id = 0
     for elem in data:
         elem['id'] = id
         id += 1
     return data
 
-def sell(data:list[dict], value:float, client_id:int):
+def sell(data:list[dict], value:float, client_id:int)->None:
     for client in data:
         if client["id"] == client_id:
             client["patrimonio"] = client["patrimonio"] - value
+
+def age(data:list[dict])->dict:
+    ages = {
+        "<18": [],
+        "18-29": [],
+        "30-39": [],
+        "40-59": [],
+        "60+": []
+    }
+
+    for elem in data:
+        val = elem["eta"]
+        if val < 18:
+            ages["<18"].append(elem)
+        elif 18 <= val <= 29:
+            ages["18-29"].append(elem)
+        elif 30 <= val <= 39:
+            ages["30-39"].append(elem)
+        elif 40 <= val <= 59:
+            ages["40-59"].append(elem)
+        else:
+            ages["60+"].append(elem)
+    return ages
 
 
 def main():
@@ -48,6 +71,10 @@ def main():
     print('\n')
     print(f"Richest: ", get_highest_heritage(data))
 
+    age_groups = age(data)
+    for group, clients in age_groups.items():
+        print(f"{group}: {clients}")
+        print('\n\n')
 
 if __name__ == "__main__":
     main()
