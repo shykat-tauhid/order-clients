@@ -50,3 +50,52 @@ Analyzes the list to find and return the client record with the highest `patrimo
 def get_highest_heritage(l:list[dict])->dict:
     return sorted(l, key=lambda x: x['patrimonio'])[-1]
 ```
+### add_id() -> list
+Adds a new key-value pair for each client containing a unique int key
+
+```python
+def add_id(data:list[dict])->list:
+    id = 0
+    for elem in data:
+        elem['id'] = id
+        id += 1
+    return data
+```
+
+### sell(data:list[dict], value:float, client_id:int) -> None
+Takes the unique client id, the client list and a price, substracts the `value` to the `patrimonio` of the client
+
+```python
+def sell(data:list[dict], value:float, client_id:int)->None:
+    for client in data:
+        if client["id"] == client_id:
+            client["patrimonio"] = client["patrimonio"] - value
+```
+
+### def age(data:list[dict]) -> dict
+categorize the clients based on the age
+
+```python
+def age(data:list[dict])->dict:
+    ages = {
+        "<18": [],
+        "18-29": [],
+        "30-39": [],
+        "40-59": [],
+        "60+": []
+    }
+
+    for elem in data:
+        val = elem["eta"]
+        if val < 18:
+            ages["<18"].append(elem)
+        elif 18 <= val <= 29:
+            ages["18-29"].append(elem)
+        elif 30 <= val <= 39:
+            ages["30-39"].append(elem)
+        elif 40 <= val <= 59:
+            ages["40-59"].append(elem)
+        else:
+            ages["60+"].append(elem)
+    return ages
+```
